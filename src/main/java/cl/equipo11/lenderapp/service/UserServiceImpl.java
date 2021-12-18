@@ -12,9 +12,12 @@ import java.util.Base64;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository repository;
+    private final CryptoService cryptoService;
 
-    public UserServiceImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository,
+                           CryptoService cryptoService) {
         this.repository = repository;
+        this.cryptoService = cryptoService;
     }
 
     @Override
@@ -22,7 +25,7 @@ public class UserServiceImpl implements UserService{
 
         User userToSave = user.toUser();
 
-        String pwd = decryptPassword(userToSave.getPassword());
+        String pwd = encryptPassword(userToSave.getPassword());
         userToSave.setPassword(pwd);
 
         repository.save(userToSave);
@@ -43,10 +46,12 @@ public class UserServiceImpl implements UserService{
         return false;
     }
 
-    private String decryptPassword(String password) {
+    private String encryptPassword(String password) {
 
-        byte[] decodedBytes = Base64.getDecoder().decode(password);
-        return new String(decodedBytes);
+//        byte[] decodedBytes = Base64.getDecoder().decode(password);
+//        String decodedString = new String(decodedBytes);
 
+//        return cryptoService.encrypt(decodedString, "secret");
+        return cryptoService.encrypt(password, "secret");
     }
 }
