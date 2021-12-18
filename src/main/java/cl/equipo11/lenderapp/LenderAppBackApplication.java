@@ -14,8 +14,6 @@ public class LenderAppBackApplication implements CommandLineRunner {
         SpringApplication.run(LenderAppBackApplication.class, args);
     }
 
-
-
     @Override
     public void run(String... args) throws Exception {
 
