@@ -6,6 +6,8 @@ import cl.equipo11.lenderapp.repository.UserRepository;
 import cl.equipo11.lenderapp.repository.domain.User;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
+
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -19,6 +21,9 @@ public class UserServiceImpl implements UserService{
     public boolean save(UserDto user) {
 
         User userToSave = user.toUser();
+
+        String pwd = decryptPassword(userToSave.getPassword());
+        userToSave.setPassword(pwd);
 
         repository.save(userToSave);
 
@@ -36,5 +41,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean update(UserDto user) {
         return false;
+    }
+
+    private String decryptPassword(String password) {
+
+        byte[] decodedBytes = Base64.getDecoder().decode(password);
+        return new String(decodedBytes);
+
     }
 }
